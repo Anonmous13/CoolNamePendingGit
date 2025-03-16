@@ -1,4 +1,4 @@
-package pedroPathing.tuners_tests.automatic;
+package tuners_tests.automatic;
 
 import static com.pedropathing.follower.FollowerConstants.leftFrontMotorDirection;
 import static com.pedropathing.follower.FollowerConstants.leftFrontMotorName;
@@ -21,21 +21,20 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
+import org.firstinspires.ftc.code.Pedro.constants.FConstants;
+import org.firstinspires.ftc.code.Pedro.constants.LConstants;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import pedroPathing.constants.FConstants;
-import pedroPathing.constants.LConstants;
 
 /**
- * This is the LateralZeroPowerAccelerationTuner autonomous follower OpMode. This runs the robot
- * to the right until a specified velocity is achieved. Then, the robot cuts power to the motors, setting
+ * This is the ForwardZeroPowerAccelerationTuner autonomous follower OpMode. This runs the robot
+ * forward until a specified velocity is achieved. Then, the robot cuts power to the motors, setting
  * them to zero power. The deceleration, or negative acceleration, is then measured until the robot
  * stops. The accelerations across the entire time the robot is slowing down is then averaged and
  * that number is then printed. This is used to determine how the robot will decelerate in the
@@ -49,8 +48,8 @@ import pedroPathing.constants.LConstants;
  * @version 1.0, 3/13/2024
  */
 @Config
-@Autonomous(name = "Lateral Zero Power Acceleration Tuner", group = "Automatic Tuners")
-public class LateralZeroPowerAccelerationTuner extends OpMode {
+@Autonomous(name = "Forward Zero Power Acceleration Tuner", group = "Automatic Tuners")
+public class ForwardZeroPowerAccelerationTuner extends OpMode {
     private ArrayList<Double> accelerations = new ArrayList<>();
 
     private DcMotorEx leftFront;
@@ -80,14 +79,14 @@ public class LateralZeroPowerAccelerationTuner extends OpMode {
         Constants.setConstants(FConstants.class, LConstants.class);
         poseUpdater = new PoseUpdater(hardwareMap);
 
-        leftFront = hardwareMap.get(DcMotorEx.class, "lf_drive");
-        leftRear = hardwareMap.get(DcMotorEx.class, "lb_drive");
-        rightRear = hardwareMap.get(DcMotorEx.class, "rb_drive");
-        rightFront = hardwareMap.get(DcMotorEx.class, "rf_Drive");
-        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightRear.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftFront = hardwareMap.get(DcMotorEx.class, leftFrontMotorName);
+        leftRear = hardwareMap.get(DcMotorEx.class, leftRearMotorName);
+        rightRear = hardwareMap.get(DcMotorEx.class, rightRearMotorName);
+        rightFront = hardwareMap.get(DcMotorEx.class, rightFrontMotorName);
+        leftFront.setDirection(leftFrontMotorDirection);
+        leftRear.setDirection(leftRearMotorDirection);
+        rightFront.setDirection(rightFrontMotorDirection);
+        rightRear.setDirection(rightRearMotorDirection);
 
         motors = Arrays.asList(leftFront, leftRear, rightFront, rightRear);
 
@@ -102,10 +101,10 @@ public class LateralZeroPowerAccelerationTuner extends OpMode {
         }
 
         telemetryA = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
-        telemetryA.addLine("The robot will run to the right until it reaches " + VELOCITY + " inches per second.");
+        telemetryA.addLine("The robot will run forward until it reaches " + VELOCITY + " inches per second.");
         telemetryA.addLine("Then, it will cut power from the drivetrain and roll to a stop.");
         telemetryA.addLine("Make sure you have enough room.");
-        telemetryA.addLine("After stopping, the lateral zero power acceleration (natural deceleration) will be displayed.");
+        telemetryA.addLine("After stopping, the forward zero power acceleration (natural deceleration) will be displayed.");
         telemetryA.addLine("Press CROSS or A on game pad 1 to stop.");
         telemetryA.update();
     }
@@ -116,8 +115,8 @@ public class LateralZeroPowerAccelerationTuner extends OpMode {
     @Override
     public void start() {
         leftFront.setPower(1);
-        leftRear.setPower(-1);
-        rightFront.setPower(-1);
+        leftRear.setPower(1);
+        rightFront.setPower(1);
         rightRear.setPower(1);
     }
 
@@ -138,7 +137,7 @@ public class LateralZeroPowerAccelerationTuner extends OpMode {
         }
 
         poseUpdater.update();
-        Vector heading = new Vector(1.0, poseUpdater.getPose().getHeading() - Math.PI / 2);
+        Vector heading = new Vector(1.0, poseUpdater.getPose().getHeading());
         if (!end) {
             if (!stopping) {
                 if (MathFunctions.dotProduct(poseUpdater.getVelocity(), heading) > VELOCITY) {
@@ -165,7 +164,7 @@ public class LateralZeroPowerAccelerationTuner extends OpMode {
             }
             average /= (double) accelerations.size();
 
-            telemetryA.addData("lateral zero power acceleration (deceleration):", average);
+            telemetryA.addData("forward zero power acceleration (deceleration):", average);
             telemetryA.update();
         }
     }

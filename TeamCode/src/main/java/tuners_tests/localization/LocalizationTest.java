@@ -1,4 +1,4 @@
-package pedroPathing.tuners_tests.localization;
+package tuners_tests.localization;
 
 import static com.pedropathing.follower.FollowerConstants.leftFrontMotorDirection;
 import static com.pedropathing.follower.FollowerConstants.leftFrontMotorName;
@@ -20,17 +20,15 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.code.Pedro.constants.FConstants;
+import org.firstinspires.ftc.code.Pedro.constants.LConstants;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.Arrays;
 import java.util.List;
-
-import pedroPathing.constants.FConstants;
-import pedroPathing.constants.LConstants;
 
 /**
  * This is the LocalizationTest OpMode. This is basically just a simple mecanum drive attached to a
@@ -63,14 +61,14 @@ public class LocalizationTest extends OpMode {
 
         dashboardPoseTracker = new DashboardPoseTracker(poseUpdater);
 
-        leftFront = hardwareMap.get(DcMotorEx.class, "lf_drive");
-        leftRear = hardwareMap.get(DcMotorEx.class, "lb_drive");
-        rightRear = hardwareMap.get(DcMotorEx.class, "rb_drive");
-        rightFront = hardwareMap.get(DcMotorEx.class, "rf_Drive");
-        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightRear.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftFront = hardwareMap.get(DcMotorEx.class, leftFrontMotorName);
+        leftRear = hardwareMap.get(DcMotorEx.class, leftRearMotorName);
+        rightRear = hardwareMap.get(DcMotorEx.class, rightRearMotorName);
+        rightFront = hardwareMap.get(DcMotorEx.class, rightFrontMotorName);
+        leftFront.setDirection(leftFrontMotorDirection);
+        leftRear.setDirection(leftRearMotorDirection);
+        rightFront.setDirection(rightFrontMotorDirection);
+        rightRear.setDirection(rightRearMotorDirection);
 
         motors = Arrays.asList(leftFront, leftRear, rightFront, rightRear);
 
@@ -106,15 +104,15 @@ public class LocalizationTest extends OpMode {
         double strafe = gamepad1.left_stick_x;
         double drive = gamepad1.left_stick_y;
 
-        double leftFrontPower = -Range.clip(-strafe - turn + drive, -1.0, 1.0);
-        double rightFrontPower = -Range.clip(-strafe - turn - drive, -1.0, 1.0);
-        double leftRearPower = Range.clip(-strafe + turn - drive, -1.0, 1.0);
-        double rightRearPower = -Range.clip(-strafe + turn + drive, -1.0, 1.0);
+        double lfPower = -Range.clip(-strafe - turn + drive, -1.0, 1.0);
+        double rfPower = -Range.clip(strafe + turn + drive, -1.0, 1.0);
+        double lbPower = Range.clip(-strafe + turn - drive, -1.0, 1.0);
+        double rbPower = -Range.clip(-strafe + turn + drive, -1.0, 1.0);
 
-        leftFront.setPower(leftFrontPower);
-        leftRear.setPower(leftRearPower);
-        rightFront.setPower(rightFrontPower);
-        rightRear.setPower(rightRearPower);
+        leftFront.setPower(lfPower);
+        leftRear.setPower(lbPower);
+        rightFront.setPower(rfPower);
+        rightRear.setPower(rbPower);
 
         telemetryA.addData("x", poseUpdater.getPose().getX());
         telemetryA.addData("y", poseUpdater.getPose().getY());

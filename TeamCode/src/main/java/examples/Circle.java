@@ -1,4 +1,4 @@
-package pedroPathing.examples;
+package examples;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -11,10 +11,9 @@ import com.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.code.Pedro.constants.FConstants;
+import org.firstinspires.ftc.code.Pedro.constants.LConstants;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
-import pedroPathing.constants.FConstants;
-import pedroPathing.constants.LConstants;
 
 /**
  * This is the Circle autonomous OpMode. It runs the robot in a PathChain that's actually not quite

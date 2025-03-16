@@ -1,4 +1,4 @@
-package pedroPathing.constants;
+package constants;
 
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.localization.GoBildaPinpointDriver;
@@ -19,11 +19,11 @@ public class LConstants {
 
         FollowerConstants.leftFrontMotorDirection = DcMotorSimple.Direction.FORWARD;
         FollowerConstants.leftRearMotorDirection = DcMotorSimple.Direction.REVERSE;
-        FollowerConstants.rightFrontMotorDirection = DcMotorSimple.Direction.FORWARD;
+        FollowerConstants.rightFrontMotorDirection = DcMotorSimple.Direction.REVERSE;
         FollowerConstants.rightRearMotorDirection = DcMotorSimple.Direction.FORWARD;
 
-        PinpointConstants.forwardY = -7.4; //tune
-        PinpointConstants.strafeX = -5.6; //tune
+        PinpointConstants.forwardY = -7.4;
+        PinpointConstants.strafeX = -5.6;
         PinpointConstants.distanceUnit = DistanceUnit.INCH;
         PinpointConstants.hardwareMapName = "pinpoint";
         PinpointConstants.useYawScalar = false;
@@ -32,7 +32,7 @@ public class LConstants {
         PinpointConstants.encoderResolution = GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD;
         PinpointConstants.customEncoderResolution = 13.26291192;
         PinpointConstants.forwardEncoderDirection = GoBildaPinpointDriver.EncoderDirection.REVERSED;
-        PinpointConstants.strafeEncoderDirection = GoBildaPinpointDriver.EncoderDirection.FORWARD;
+        PinpointConstants.strafeEncoderDirection = GoBildaPinpointDriver.EncoderDirection.REVERSED;
 
     }
 }
